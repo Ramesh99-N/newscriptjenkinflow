@@ -12,14 +12,14 @@ node
     {
     sh "${mavenHome}/bin/mvn clean package"
     }
-    stage('ExecuteSonarQuabeReport')
+   /* stage('ExecuteSonarQuabeReport')
     {
     sh "${mavenHome}/bin/mvn sonar:sonar"  
     }
     stage('UploadArtifactintoNexus')
     {
     sh "${mavenHome}/bin/mvn deploy"  
-    }
+    }*/
 	stage('SendEmailNotification')
 	{
 	emailext body: 'build is over', subject: 'build is over', to: 'ramesh.nunna9999@gmail.com'
