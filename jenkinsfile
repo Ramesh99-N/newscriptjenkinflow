@@ -1,0 +1,28 @@
+node
+{
+    def mavenHome = tool name: "Maven"
+    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '5', numToKeepStr: '5')), pipelineTriggers([pollSCM('* * * * *')])])
+  stage('CheckoutCode')
+  {
+      git branch: 'development', credentialsId: 'e5f99023-f644-4f97-bc9a-697f44aea9c0', url: 
+      'https://github.com/Ramesh99-N/maven-test.git'
+  }
+
+    stage('Build')
+    {
+    sh "${mavenHome}/bin/mvn clean package"
+    }
+    stage('ExecuteSonarQuabeReport')
+    {
+    sh "${mavenHome}/bin/mvn sonar:sonar"  
+    }
+    stage('UploadArtifactintoNexus')
+    {
+    sh "${mavenHome}/bin/mvn deploy"  
+    }
+	stage('SendEmailNotification')
+	{
+	emailext body: 'build is over', subject: 'build is over', to: 'ramesh.nunna9999@gmail.com'
+	}
+    
+}
